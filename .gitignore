@@ -1,0 +1,7 @@
+__pycache__
+resources
+resources/*.pt
+resources/*.npy
+resources/*.wav
+wandb
+.idea
