@@ -19,7 +19,7 @@ parser = argparse.ArgumentParser(description='Example of parser. ')
 # model name decides, which pre-trained model is loaded
 parser.add_argument('--model_name', type=str, default='mn40_as_ext')
 parser.add_argument('--cuda', action='store_true', default=False)
-parser.add_argument('--audio_path', type=str, required=False, default="resources/--HXYSM3ydo_2.wav")
+parser.add_argument('--audio_path', type=str, required=False, default="resources/9rw3qz2ouRQ_290.wav")
 
 # preprocessing
 parser.add_argument('--sample_rate', type=int, default=32000)
@@ -55,7 +55,7 @@ else:
 
 model.to(device)
 model.eval()
-# pdb.set_trace()
+
 # model to preprocess waveform into mel spectrograms
 mel = AugmentMelSTFT(n_mels=n_mels, sr=sample_rate, win_length=window_size, hopsize=hop_size)
 mel.to(device)
@@ -71,22 +71,56 @@ def inference(audio_path):
     preds = torch.sigmoid(preds.float()).squeeze().cpu().numpy()
 
     sorted_indexes = np.argsort(preds)[::-1]
-    # print(labels)
-    # print("preds", preds)
-    # print("sorted_indexes", sorted_indexes)
-    candidates = {"Vehicle horn": preds[308],
-                  "Baby Crying": preds[23],
-                  "Whistle": preds[402],
-                  "Glass": preds[441]}
 
     result = {}
-    result.update({"Vehicle horn": preds[308]})
-    result.update({"Baby Crying": preds[32]})
-    result.update({"Whistle": preds[402]})
-    result.update({"Glass": preds[441]})
+    output = {}
+    # Car horn sound
+    result.update({"Vehicle horn": preds[308]}) # 0.4
+    result.update({"Train horn":preds[331]}) # 0.1
+    result.update({"Foghorn":preds[401]}) # 0.1
+    result.update({"Air horn, truck horn": preds[318]}) # 0.4
+    output.update({"Car horn": preds[308]*0.4 + preds[331]*0.1 + preds[401]*0.1 + preds[318]*0.4})
+    # Infant Crying sound
+    result.update({"Baby Crying": preds[23]}) # 0.6
+    result.update({"Baby Laughter": preds[17]}) # 0.2
+    result.update({"Giggle": preds[18]}) # 0.5
+    result.update({"Whimper": preds[24]}) # 0.5
+    result.update({"Child speech, kid speaking": preds[3]}) # 0.5
+    result.update({"Crying, sobbing": preds[22]}) # 0.5
+    output.update({"Infant Crying": preds[23]*0.6 + preds[17]*0.2 + preds[18]*0.05 + preds[24]*0.05 + preds[3]*0.05 + preds[22]*0.05})
+    # Glass
+    result.update({"Glass": preds[441]}) # 0.45
+    result.update({"Chink, clink": preds[442]}) # 0.45
+    result.update({"Crack": preds[440]}) # 0.1
+    output.update({"Glass": preds[441]*0.45 + preds[442]*0.45 + preds[440]*0.1})
+    # Fire Alarm
+    result.update({"Fire Alarm": preds[400]}) # 0.35
+    result.update({"Smoke detector, smoke alarm":preds[399]}) # 0.35
+    result.update({"Siren":preds[396]}) # 0.2
+    result.update({"Buzzer":preds[398]}) # 0.1
+    output.update({"Fire alarm": (preds[400]*0.35 + preds[399]*0.35 + preds[396]*0.2 + preds[398]*0.1)})
+    # Siren
+    result.update({"Police car(siren)": preds[323]}) # 0.33
+    result.update({"Ambulance(siren)": preds[324]}) # 0.33
+    result.update({"Fire truck(siren)": preds[325]}) # 0.33
+    # output.update({"Car siren": preds[323]*0.33 + preds[324]*0.33 + preds[325]*0.33})
+    # Gunshot
+    result.update({"Gunshot": preds[427]}) # 0.5
+    result.update({"Machine Gun": preds[428]}) # 0.4
+    result.update({"Fusillade": preds[429]}) # 0.1
+    output.update({"Gunshot": preds[427]*0.5 + preds[428]*0.4 + preds[429]*0.1})
 
-    return result
 
+    # Print audio tagging top probabilities
+    # print("************* Acoustic Event Detected: *****************")
+    # for k in range(10):
+    #     print('{}: {:.3f}'.format(labels[sorted_indexes[k]],
+    #         preds[sorted_indexes[k]]))
+    # print("********************************************************")
+    
+    return output
+
+# comment this to not show test inference for the first time
 print(inference(audio_path))
 
 def audio_tagging(args):
