@@ -77,87 +77,31 @@ You can use one of the pre-trained models for inference on a an audio file using
 
 For example, use **mn10_as** to detect acoustic events at a metro station in paris:
 
-```
-python inference.py --cuda --model_name=mn10_as --audio_path="resources/metro_station-paris.wav"
-```
-
-This will result in the following output showing the 10 events detected with the highest probability:
+Change the audio_path to your own wav file path.
 
 ```
-************* Acoustic Event Detected: *****************
-Train: 0.811
-Rail transport: 0.649
-Railroad car, train wagon: 0.630
-Subway, metro, underground: 0.552
-Vehicle: 0.328
-Clickety-clack: 0.179
-Speech: 0.061
-Outside, urban or manmade: 0.029
-Music: 0.026
-Train wheels squealing: 0.021
-********************************************************
+python inference.py --cuda --model_name=mn10_as --audio_path="resources/-fz6omiAhZ8_40.wav"
+```
+
+This will result in the following output showing the events detected that we chose to classify:
+
+```
+{'Car horn': 0.16050603486364706, 
+ 'Infant Crying': 0.000295591248141136, 
+ 'Glass': 0.0001893545668281149,
+ 'Fire alarm': 0.005741941637825221,
+ 'Gunshot': 0.00030780517881794366}
 ```
 
 You can also use an ensemble for perform inference, e.g.:
 
 ```
-python inference.py --ensemble mn40_as_ext mn40_as mn40_as_no_im_pre --cuda --audio_path=resources/metro_station-paris.wav
-```
+python inference.py --ensemble mn40_as_ext mn40_as mn40_as_no_im_pre --cuda --audio_path="resources/-fz6omiAhZ8_40.wav"
 
+```
 
 **Important:** All models are trained with half precision (float16). If you run float32 inference on cpu,
 you might notice a slight performance degradation.
-
-## Train and Evaluate on AudioSet
-
-The training and evaluation procedures are simplified as much as possible. The most difficult part is to get AudioSet[4]
-itself as it has a total size of around 1.1 TB and it must be downloaded from YouTube. Follow the instructions in 
-the [PaSST](https://github.com/kkoutini/PaSST/tree/main/audioset) repository to get AudioSet in the format we need
-to run the code in this repository. You should end up with three files:
-* ```balanced_train_segmenets_mp3.hdf```
-* ```unbalanced_train_segmenets_mp3.hdf```
-* ```eval_segmenets_mp3.hdf```
-
-Specify the folder containing the three files above in ```dataset_dir``` in the [dataset file](datasets/audioset.py).
-
-Training and evaluation on AudioSet is implemented in the file [ex_audioset.py](ex_audioset.py).
-#### Evaluation
-
-To evaluate a model on the AudioSet evaluation data, run the following command:
-
-```
-python ex_audioset.py --cuda --model_name="mn10_as"
-```
-
-Which will result in the following output:
-
-```
-Results on AudioSet test split for loaded model: mn10_as
-  mAP: 0.471
-  ROC: 0.980
-```
-
-#### Training
-
-Logging is done using [Weights & Biases](https://wandb.ai/site). Create a free account to log your experiments. During training
-the latest model will be saved to the directory [wandb](wandb).
-
-To train a model on AudioSet, you can run for example the following command:
-```
-python ex_audioset.py --cuda --train --pretrained_name=mn10_im_pytorch --batch_size=60 --max_lr=0.0004
-```
-
-Checkout the results of this example configuration [here](https://wandb.ai/florians/EfficientAudioTagging/reports/Training-mn10_as-from-ImageNet-pre-trained-on-a-GeForce-RTX-2080-Ti--VmlldzozMDMwMTc4).
-
-To train a tiny model (```model_width=0.1```) with Squeeze-and-Excitation [10] on the frequency dimension and a fully convolutional
-classification head, run the following command:
-
-```
-python ex_audioset.py --cuda --train --batch_size=120 --model_width=0.1 --head_type=fully_convolutional --se_dims=f
-```
-
-Checkout the results of this example configuration [here](https://wandb.ai/florians/EfficientAudioTagging/reports/Train-Tiny-Model-width-0-1---VmlldzozMDMwMjkx).
-
 
 
 ## References
