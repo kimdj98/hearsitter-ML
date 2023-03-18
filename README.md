@@ -103,6 +103,9 @@ python inference.py --ensemble mn40_as_ext mn40_as mn40_as_no_im_pre --cuda --au
 **Important:** All models are trained with half precision (float16). If you run float32 inference on cpu,
 you might notice a slight performance degradation.
 
+------------------------------
+Inside inference.py we made 'def inference(audio_path)' function for server purpose.
+
 
 ## References
 
