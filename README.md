@@ -104,8 +104,9 @@ python inference.py --ensemble mn40_as_ext mn40_as mn40_as_no_im_pre --cuda --au
 you might notice a slight performance degradation.
 
 ------------------------------
-Inside inference.py we made **'def inference(audio_path)'** function for server purpose.
+Inside inference.py we made function **inference(audio_path)** for server purpose.
 
+Inside inference.py change model in ensemble argument's default part based on pretrained-models above **parser.add_argument('--ensemble', nargs='+', defuault=["mn40_as", mn40_as_ext"])** if you don't want to use ensemble method just put an empty list []. and change model_name argument.
 
 ## References
 
