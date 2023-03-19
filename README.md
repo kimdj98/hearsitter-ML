@@ -111,3 +111,8 @@ Inside inference.py change model in ensemble argument's default part based on pr
 ## References
 
 [1] https://github.com/fschmid56/EfficientAT
+
+
+Team github pages
+
+SeeOurSounds-Server: https://github.com/jimmy0006/solution-go
