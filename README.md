@@ -116,7 +116,11 @@ Inside inference.py change model in ensemble argument's default part based on pr
 Team github pages
 
 hearsitter-server: 
+
 (1) https://github.com/jimmy0006/hearsitter-server-python
+
 (2) https://github.com/jimmy0006/hearsitter-server-go
+
 hearsitter-flutter:
+
 (1) https://github.com/gdsc-ys/hearsitter-flutter
