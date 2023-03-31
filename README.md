@@ -1,5 +1,14 @@
-# SeeOurSounds-ML Repo
+# hearsitter-ML Repo
 
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/88659167/229131308-d658434a-cc34-46d0-a3da-4f2cb86272d0.png" width="170px" alt="HearSitter Logo" />
+</p>
+
+<h1 align="center">HearSitter</h1>
+
+<br>
 ## Abstract
 We are team from GDSC-Yonsei Warning is all you need. Our application is for the heraing defect especially who raise kids.
 
