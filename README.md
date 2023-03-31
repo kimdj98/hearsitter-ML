@@ -135,3 +135,7 @@ hearsitter-server:
 hearsitter-flutter:
 
 (1) https://github.com/gdsc-ys/hearsitter-flutter
+
+landing-page
+
+https://github.com/mumwa/hearsitter-landingpage
